@@ -1,0 +1,12 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.homeContainer {
+    width: 70%;
+    margin: 10px auto 0;
+    background-color: azure;
+    border-radius: 12px;
+    padding: 10px;
+}

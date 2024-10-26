@@ -1,12 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {RouterProvider} from "react-router-dom";
+import router from "./router.jsx";
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer} from "react-toastify";
+import {useContext} from "react";
+import {BackdropLoaderContext} from "./context/BackdropLoaderContext.jsx";
+import BackdropLoader from "./components/backdrop-loader/BackdropLoader.jsx";
 
 function App() {
-
+    const backdropLoaderContext = useContext(BackdropLoaderContext);
   return (
       <>
-          <h1>Hello World</h1>
+          <BackdropLoader open={backdropLoaderContext.show}/>
+          <ToastContainer autoClose={2000}/>
+          <RouterProvider router={router}/>
       </>
   )
 }
