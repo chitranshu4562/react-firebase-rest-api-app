@@ -1,4 +1,9 @@
-import {getAuthDataFromLocalStorage, removeAuthDataFromLocalStorage} from "../../utils.js";
+import {
+    getAuthDataFromLocalStorage, getCurrentTimeInMS,
+    getExpirationTime,
+    removeAuthDataFromLocalStorage,
+    removeExpirationTime
+} from "../../utils.js";
 import {Outlet, redirect, useNavigate} from "react-router-dom";
 import {useContext, useEffect} from "react";
 import {AuthDataContext} from "../../context/AuthDataContext.jsx";
@@ -8,6 +13,7 @@ export default function HomePage() {
     const {user, setUser} = useContext(AuthDataContext);
     const navigate = useNavigate();
     const handleLogout = () => {
+        removeExpirationTime();
         removeAuthDataFromLocalStorage();
         navigate('/login');
     }
@@ -16,6 +22,21 @@ export default function HomePage() {
         if (!user) {
             const authData = getAuthDataFromLocalStorage();
             setUser(authData);
+        }
+    }, []);
+
+    useEffect(() => {
+        const currentExpirationTime = getExpirationTime() - getCurrentTimeInMS();
+        console.log('current expiration time: ',currentExpirationTime);
+
+        if (currentExpirationTime < 0) {
+            handleLogout();
+        }
+
+        const timer = setInterval(handleLogout, currentExpirationTime);
+
+        return () => {
+            clearTimeout(timer);
         }
     }, []);
 

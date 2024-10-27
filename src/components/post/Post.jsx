@@ -29,8 +29,6 @@ export default function Post({ post }) {
         }
     }
 
-    console.log('qwerty')
-
     return (
         <>
             <div className="card" style={{width: '18rem'}}>

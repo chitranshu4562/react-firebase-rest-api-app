@@ -3,7 +3,13 @@ import classes from "./Auth.module.css";
 import {BackdropLoaderContext} from "../../context/BackdropLoaderContext.jsx";
 import {userSignup} from "../../api.js";
 import {Link, useNavigate} from "react-router-dom";
-import {errorNotification, storeAuthDataInLocalStorage, successNotification} from "../../utils.js";
+import {
+    errorNotification,
+    getCurrentTimeInMS,
+    storeAuthDataInLocalStorage,
+    storeExpirationTime,
+    successNotification
+} from "../../utils.js";
 import {AuthDataContext} from "../../context/AuthDataContext.jsx";
 
 export default function SignupPage() {
@@ -39,6 +45,8 @@ export default function SignupPage() {
                 authToken: response.data.idToken,
                 expirationTime: response.data.expiresIn
             }
+            const expirationTimeInMS = getCurrentTimeInMS() + (authData.expirationTime * 1000);
+            storeExpirationTime(expirationTimeInMS);
             storeAuthDataInLocalStorage(authData);
             authDataContext.setUser(authData);
             console.log(response);

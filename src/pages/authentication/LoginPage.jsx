@@ -2,7 +2,13 @@ import classes from "./Auth.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useState} from "react";
 import {userLogin, userSignup} from "../../api.js";
-import {errorNotification, storeAuthDataInLocalStorage, successNotification} from "../../utils.js";
+import {
+    errorNotification,
+    getCurrentTimeInMS,
+    storeAuthDataInLocalStorage,
+    storeExpirationTime,
+    successNotification
+} from "../../utils.js";
 import {BackdropLoaderContext} from "../../context/BackdropLoaderContext.jsx";
 import {AuthDataContext} from "../../context/AuthDataContext.jsx";
 
@@ -30,6 +36,8 @@ export default function LoginPage() {
                 authToken: response.data.idToken,
                 expirationTime: response.data.expiresIn
             }
+            const expirationTimeInMS = getCurrentTimeInMS() + (authData.expirationTime * 1000);
+            storeExpirationTime(expirationTimeInMS);
             storeAuthDataInLocalStorage(authData);
             authDataContext.setUser(authData);
             console.log(response);
